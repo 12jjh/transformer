@@ -2,20 +2,19 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Transformer 보고서 PPT</title>
+<title>Transformer 발표</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body {
     margin: 0;
     font-family: 'Segoe UI';
-    overflow-x: hidden;
 }
 
 /* 슬라이드 */
 .slide {
     height: 100vh;
-    padding: 60px;
+    padding: 40px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -24,12 +23,6 @@ body {
     background: linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
     color: white;
     text-align: center;
-    animation: fade 1s ease;
-}
-
-@keyframes fade {
-    from {opacity:0; transform:translateY(30px);}
-    to {opacity:1; transform:translateY(0);}
 }
 
 h1 {
@@ -39,17 +32,37 @@ h1 {
     -webkit-text-fill-color: transparent;
 }
 
-h2 { font-size: 38px; color:#00e0ff; }
-h3 { font-size: 26px; margin-top:20px; }
+h2 { font-size: 36px; color:#00e0ff; }
 
-.main { font-size: 24px; font-weight: 600; }
-.sub { font-size: 20px; opacity: 0.75; }
+.main { font-size: 22px; }
+.sub { font-size: 18px; opacity: 0.8; }
 
-.highlight { color: #ffd700; font-weight: 800; }
+.highlight { color: #ffd700; font-weight: bold; }
+
+/* 표 스타일 */
+table {
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+    background: white;
+    color: black;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+td, th {
+    border: 1px solid #ccc;
+    padding: 6px 10px;
+}
+
+th {
+    background: #0072ff;
+    color: white;
+}
 
 canvas {
     background: white;
-    border-radius: 12px;
+    border-radius: 10px;
     padding: 10px;
     margin-top: 20px;
 }
@@ -63,15 +76,14 @@ html { scroll-behavior: smooth; }
 <!-- 제목 -->
 <div class="slide">
     <h1>Transformer Sampling 분석</h1>
-    <p class="main">temperature, top-k, top-p의 역할 분석</p>
+    <p class="main">"I am a" 다음 단어 예측 실험</p>
 </div>
 
 <!-- 목적 -->
 <div class="slide">
-    <h2>연구 목적</h2>
+    <h2>목적</h2>
     <p class="main">
-        <span class="highlight">temperature, top-k, top-p</span>가<br>
-        출력 결과에 미치는 영향을 분석한다
+        <span class="highlight">temperature, k, top-p</span>의 역할 분석
     </p>
 </div>
 
@@ -79,58 +91,58 @@ html { scroll-behavior: smooth; }
 <div class="slide">
     <h2>가설</h2>
     <p class="main">
-        1. k는 출력 개수를 결정한다<br>
-        2. top-p는 2ⁿ 형태로 증가한다<br>
-        3. temperature는 확률을 재분배한다
+        k → 개수<br>
+        p → 확률 기준 선택<br>
+        temperature → 확률 분배
     </p>
 </div>
 
-<!-- k 설명 -->
+<!-- 데이터 표 -->
 <div class="slide">
-    <h2>Top-k</h2>
-    <p class="main">
-        <span class="highlight">출력 단어 개수 제한</span>
-    </p>
-</div>
-
-<!-- temperature -->
-<div class="slide">
-    <h2>Temperature</h2>
-    <p class="main">
-        <span class="highlight">확률 분포의 퍼짐 조절</span>
-    </p>
+    <h2>실험 데이터 (k=2)</h2>
+    <table>
+        <tr><th>Temperature</th><th>very</th><th>man</th></tr>
+        <tr><td>0.2</td><td>66.91</td><td>33.09</td></tr>
+        <tr><td>0.3</td><td>61.52</td><td>38.48</td></tr>
+        <tr><td>0.4</td><td>58.71</td><td>41.29</td></tr>
+        <tr><td>0.5</td><td>56.99</td><td>43.01</td></tr>
+        <tr><td>0.6</td><td>55.84</td><td>44.16</td></tr>
+        <tr><td>0.7</td><td>55.01</td><td>44.99</td></tr>
+        <tr><td>0.8</td><td>54.39</td><td>45.61</td></tr>
+        <tr><td>0.9</td><td>53.90</td><td>46.10</td></tr>
+        <tr><td>1.0</td><td>53.51</td><td>46.49</td></tr>
+    </table>
 </div>
 
 <!-- 그래프 k=2 -->
 <div class="slide">
-    <h2>k = 2</h2>
-    <p class="sub">temperature 증가 → 확률 균등화</p>
+    <h2>k = 2 그래프</h2>
     <canvas id="c2"></canvas>
 </div>
 
-<!-- k=3 -->
+<!-- 그래프 k=3 -->
 <div class="slide">
-    <h2>k = 3</h2>
+    <h2>k = 3 그래프</h2>
     <canvas id="c3"></canvas>
 </div>
 
-<!-- k=4 -->
+<!-- 그래프 k=4 -->
 <div class="slide">
-    <h2>k = 4</h2>
+    <h2>k = 4 그래프</h2>
     <canvas id="c4"></canvas>
 </div>
 
-<!-- k=5 -->
+<!-- 그래프 k=5 -->
 <div class="slide">
-    <h2>k = 5</h2>
+    <h2>k = 5 그래프</h2>
     <canvas id="c5"></canvas>
 </div>
 
 <!-- 해석 -->
 <div class="slide">
-    <h2>결과 해석</h2>
+    <h2>해석</h2>
     <p class="main">
-        temperature ↑ → 확률이 평평해짐<br>
+        temperature ↑ → 확률 균등<br>
         k ↑ → 더 많은 단어 포함
     </p>
 </div>
@@ -139,9 +151,9 @@ html { scroll-behavior: smooth; }
 <div class="slide">
     <h2>결론</h2>
     <p class="main">
-        <span class="highlight">temperature</span> → 다양성 조절<br>
-        <span class="highlight">k</span> → 개수 제한<br>
-        <span class="highlight">top-p</span> → 확률 기준 선택
+        <span class="highlight">temperature</span> → 다양성<br>
+        <span class="highlight">k</span> → 개수<br>
+        <span class="highlight">top-p</span> → 확률 기준
     </p>
 </div>
 
@@ -154,9 +166,7 @@ function draw(id,data){
         data:{labels:labels,datasets:data},
         options:{
             animation:{duration:2000},
-            scales:{
-                y:{min:0,max:70}
-            }
+            scales:{y:{min:0,max:70}}
         }
     });
 }
@@ -184,11 +194,11 @@ draw("c4",[
 
 /* k=5 */
 draw("c5",[
-{label:'very',data:[42.47,34.37,30.48,28.22,26.76,25.73,24.97,23.84,null]},
-{label:'man',data:[21.00,21.49,21.43,21.29,21.16,21.04,20.94,19.84,null]},
-{label:'member',data:[17.43,18.98,19.52,19.76,19.88,19.95,19.99,20.02,null]},
-{label:'big',data:[12.43,15.15,16.49,17.26,17.77,18.11,18.37,18.50,null]},
-{label:'little',data:[6.67,10.01,12.08,13.46,14.44,15.16,15.72,17.8,null]}
+{label:'very',data:[42.47,34.37,30.48,28.22,26.76,25.73,24.97,null,null]},
+{label:'man',data:[21.00,21.49,21.43,21.29,21.16,21.04,20.94,null,null]},
+{label:'member',data:[17.43,18.98,19.52,19.76,19.88,19.95,19.99,null,null]},
+{label:'big',data:[12.43,15.15,16.49,17.26,17.77,18.11,18.37,null,null]},
+{label:'little',data:[6.67,10.01,12.08,13.46,14.44,15.16,15.72,null,null]}
 ]);
 </script>
 
