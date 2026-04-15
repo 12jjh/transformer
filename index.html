@@ -2,179 +2,195 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Transformer 파라미터 분석 보고서</title>
+<title>Transformer 보고서 PPT</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body {
-    font-family: 'Segoe UI', sans-serif;
-    line-height: 1.8;
-    margin: 40px;
-    background: #f5f7fa;
-    color: #222;
+    margin: 0;
+    font-family: 'Segoe UI';
+    overflow-x: hidden;
 }
 
-.container {
-    max-width: 900px;
-    margin: auto;
-    background: white;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+/* 슬라이드 */
+.slide {
+    height: 100vh;
+    padding: 60px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
+    color: white;
+    text-align: center;
+    animation: fade 1s ease;
+}
+
+@keyframes fade {
+    from {opacity:0; transform:translateY(30px);}
+    to {opacity:1; transform:translateY(0);}
 }
 
 h1 {
-    text-align: center;
-    font-size: 32px;
-    margin-bottom: 40px;
+    font-size: 50px;
+    background: linear-gradient(90deg,#00f2fe,#4facfe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-h2 {
-    margin-top: 30px;
-    border-left: 5px solid #0072ff;
-    padding-left: 10px;
-}
+h2 { font-size: 38px; color:#00e0ff; }
+h3 { font-size: 26px; margin-top:20px; }
 
-h3 {
+.main { font-size: 24px; font-weight: 600; }
+.sub { font-size: 20px; opacity: 0.75; }
+
+.highlight { color: #ffd700; font-weight: 800; }
+
+canvas {
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
     margin-top: 20px;
 }
 
-p {
-    margin: 10px 0;
-}
-
-.highlight {
-    font-weight: bold;
-    color: #0072ff;
-}
-
-.conclusion {
-    background: #eef5ff;
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 20px;
-}
+html { scroll-behavior: smooth; }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-<h1>Transformer 모델의 Sampling 파라미터 분석 보고서</h1>
-
-<h2>1. 서론</h2>
-
-<h3>1.1 목적</h3>
-<p>
-본 실험의 목적은 Transformer 모델에서 사용되는 
-<span class="highlight">temperature, top-k, top-p</span> 파라미터가 
-출력 단어 선택에 어떤 영향을 미치는지 분석하는 것이다.
-</p>
-
-<p>
-특히 각 파라미터가 확률 분포와 결과 생성 방식에 미치는 영향을 비교하고,
-모델의 출력 특성이 어떻게 변화하는지를 이해하는 것을 목표로 한다.
-</p>
-
-<h3>1.2 가설</h3>
-<p>본 실험에서는 다음과 같은 가설을 설정하였다.</p>
-
-<p>
-1. <span class="highlight">k는 출력되는 단어의 개수를 결정할 것이다.</span><br>
-2. <span class="highlight">top-p는 일정 확률 기준에 따라 선택되는 단어 수가 결정되며, 2ⁿ 형태로 증가할 것이다.</span><br>
-3. <span class="highlight">temperature는 확률을 재분배하여 특정 단어에 집중되거나 분산되게 할 것이다.</span>
-</p>
-
-<h2>2. 실험 결과 해석</h2>
-
-<h3>2.1 Temperature에 따른 변화</h3>
-<p>
-temperature가 낮을 경우 특정 단어의 확률이 매우 높게 나타났으며,
-모델이 하나의 단어를 확신하고 선택하는 경향을 보였다.
-</p>
-
-<p>
-반면 temperature가 증가할수록 각 단어의 확률이 점점 비슷해졌으며,
-여러 단어가 유사한 확률을 가지게 되었다.
-</p>
-
-<p>
-이는 temperature가 확률 분포를 평탄하게 만들어 
-모델의 출력이 더 다양해지도록 만든다는 것을 의미한다.
-</p>
-
-<h3>2.2 k 값에 따른 변화</h3>
-<p>
-k 값이 증가할수록 더 많은 단어가 출력 결과에 포함되었으며,
-각 단어의 확률이 더 균등하게 분배되는 경향이 나타났다.
-</p>
-
-<p>
-이는 k가 작을 경우 상위 단어만 선택되지만,
-k가 커질수록 하위 확률 단어까지 포함되기 때문이다.
-</p>
-
-<p>
-따라서 k는 출력 후보의 개수를 제한하는 역할을 한다.
-</p>
-
-<h3>2.3 top-p에 대한 해석</h3>
-<p>
-top-p는 확률이 높은 단어부터 누적하여 
-총합이 일정 값에 도달할 때까지 선택하는 방식이다.
-</p>
-
-<p>
-이로 인해 확률이 한쪽에 몰려 있을 경우 적은 단어만 선택되며,
-확률이 분산되어 있을 경우 더 많은 단어가 선택된다.
-</p>
-
-<p>
-이는 top-k와 달리 고정된 개수가 아닌,
-확률 분포에 따라 선택되는 단어 수가 달라진다는 특징을 가진다.
-</p>
-
-<h2>3. 종합 분석</h2>
-
-<p>
-세 가지 파라미터를 종합하면 다음과 같이 정리할 수 있다.
-</p>
-
-<p>
-- <span class="highlight">temperature</span> → 확률 분포의 형태 조절<br>
-- <span class="highlight">k (top-k)</span> → 출력 단어 개수 제한<br>
-- <span class="highlight">top-p</span> → 확률 기준으로 선택 범위 결정
-</p>
-
-<h2>4. 가설 검증</h2>
-
-<p>
-1. k는 단어 개수를 결정한다 → <span class="highlight">성립</span><br>
-2. temperature는 확률을 재분배한다 → <span class="highlight">성립</span><br>
-3. top-p가 2ⁿ 형태로 증가한다 → <span class="highlight">성립하지 않음</span>
-</p>
-
-<p>
-top-p는 실제로 2ⁿ이 아니라 확률 누적 기준으로 동작한다는 점에서
-초기 가설과 차이가 있었다.
-</p>
-
-<h2>5. 결론</h2>
-
-<div class="conclusion">
-<p>
-Transformer 모델의 출력은 확률 분포를 기반으로 하며,
-temperature, k, top-p는 이 확률 분포를 조절하는 핵심 요소이다.
-</p>
-
-<p>
-특히 temperature는 출력의 다양성을 결정하고,
-k와 top-p는 선택 범위를 제한함으로써
-모델의 생성 결과를 제어할 수 있다.
-</p>
+<!-- 제목 -->
+<div class="slide">
+    <h1>Transformer Sampling 분석</h1>
+    <p class="main">temperature, top-k, top-p의 역할 분석</p>
 </div>
 
+<!-- 목적 -->
+<div class="slide">
+    <h2>연구 목적</h2>
+    <p class="main">
+        <span class="highlight">temperature, top-k, top-p</span>가<br>
+        출력 결과에 미치는 영향을 분석한다
+    </p>
 </div>
+
+<!-- 가설 -->
+<div class="slide">
+    <h2>가설</h2>
+    <p class="main">
+        1. k는 출력 개수를 결정한다<br>
+        2. top-p는 2ⁿ 형태로 증가한다<br>
+        3. temperature는 확률을 재분배한다
+    </p>
+</div>
+
+<!-- k 설명 -->
+<div class="slide">
+    <h2>Top-k</h2>
+    <p class="main">
+        <span class="highlight">출력 단어 개수 제한</span>
+    </p>
+</div>
+
+<!-- temperature -->
+<div class="slide">
+    <h2>Temperature</h2>
+    <p class="main">
+        <span class="highlight">확률 분포의 퍼짐 조절</span>
+    </p>
+</div>
+
+<!-- 그래프 k=2 -->
+<div class="slide">
+    <h2>k = 2</h2>
+    <p class="sub">temperature 증가 → 확률 균등화</p>
+    <canvas id="c2"></canvas>
+</div>
+
+<!-- k=3 -->
+<div class="slide">
+    <h2>k = 3</h2>
+    <canvas id="c3"></canvas>
+</div>
+
+<!-- k=4 -->
+<div class="slide">
+    <h2>k = 4</h2>
+    <canvas id="c4"></canvas>
+</div>
+
+<!-- k=5 -->
+<div class="slide">
+    <h2>k = 5</h2>
+    <canvas id="c5"></canvas>
+</div>
+
+<!-- 해석 -->
+<div class="slide">
+    <h2>결과 해석</h2>
+    <p class="main">
+        temperature ↑ → 확률이 평평해짐<br>
+        k ↑ → 더 많은 단어 포함
+    </p>
+</div>
+
+<!-- 결론 -->
+<div class="slide">
+    <h2>결론</h2>
+    <p class="main">
+        <span class="highlight">temperature</span> → 다양성 조절<br>
+        <span class="highlight">k</span> → 개수 제한<br>
+        <span class="highlight">top-p</span> → 확률 기준 선택
+    </p>
+</div>
+
+<script>
+const labels = [0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0];
+
+function draw(id,data){
+    new Chart(document.getElementById(id),{
+        type:'line',
+        data:{labels:labels,datasets:data},
+        options:{
+            animation:{duration:2000},
+            scales:{
+                y:{min:0,max:70}
+            }
+        }
+    });
+}
+
+/* k=2 */
+draw("c2",[
+{label:'very',data:[66.91,61.52,58.71,56.99,55.84,55.01,54.39,53.90,53.51]},
+{label:'man',data:[33.09,38.48,41.29,43.01,44.16,44.99,45.61,46.10,46.49]}
+]);
+
+/* k=3 */
+draw("c3",[
+{label:'very',data:[52.50,45.92,42.67,40.74,39.46,38.56,37.89,37.38,36.96]},
+{label:'man',data:[25.96,28.72,30.00,30.74,31.21,31.54,31.78,31.96,32.11]},
+{label:'member',data:[21.54,25.36,27.33,28.53,29.33,29.90,30.33,30.66,30.93]}
+]);
+
+/* k=4 */
+draw("c4",[
+{label:'very',data:[45.50,38.19,34.66,32.61,31.27,30.33,29.63,29.10,28.67]},
+{label:'man',data:[22.50,23.88,24.38,24.61,24.73,24.80,24.85,24.88,24.91]},
+{label:'member',data:[18.67,21.09,22.21,22.84,23.24,23.52,23.72,23.87,23.99]},
+{label:'big',data:[13.32,16.84,18.75,19.95,20.76,21.35,21.80,22.15,22.43]}
+]);
+
+/* k=5 */
+draw("c5",[
+{label:'very',data:[42.47,34.37,30.48,28.22,26.76,25.73,24.97,23.84,null]},
+{label:'man',data:[21.00,21.49,21.43,21.29,21.16,21.04,20.94,19.84,null]},
+{label:'member',data:[17.43,18.98,19.52,19.76,19.88,19.95,19.99,20.02,null]},
+{label:'big',data:[12.43,15.15,16.49,17.26,17.77,18.11,18.37,18.50,null]},
+{label:'little',data:[6.67,10.01,12.08,13.46,14.44,15.16,15.72,17.8,null]}
+]);
+</script>
 
 </body>
 </html>
