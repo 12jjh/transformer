@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Transformer Temperature & k</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #111;
+    color: white;
+}
+.slide {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+h1 { font-size: 48px; }
+h2 { font-size: 36px; }
+p { font-size: 22px; width: 60%; text-align: center; }
+canvas {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 제목 -->
+<div class="slide">
+    <h1>Transformer 실험</h1>
+    <p>"I am a" 다음 단어 예측<br>
+    temperature & k 분석</p>
+</div>
+
+<!-- k 설명 -->
+<div class="slide">
+    <h2>k의 역할</h2>
+    <p>
+    k는 출력할 단어 개수이다.<br><br>
+    k=1 → 1개만 출력<br>
+    k=5 → 5개 후보 출력<br><br>
+    👉 후보 개수 제한
+    </p>
+</div>
+
+<!-- temperature 설명 -->
+<div class="slide">
+    <h2>Temperature의 역할</h2>
+    <p>
+    temperature는 확률 분포의 퍼짐을 조절한다.<br><br>
+    낮음 → 한 단어에 집중<br>
+    높음 → 여러 단어로 분산<br><br>
+    👉 랜덤성 조절
+    </p>
+</div>
+
+<!-- k=2 -->
+<div class="slide">
+    <h2>k = 2</h2>
+    <canvas id="chart2" width="600" height="400"></canvas>
+</div>
+
+<!-- k=3 -->
+<div class="slide">
+    <h2>k = 3</h2>
+    <canvas id="chart3" width="600" height="400"></canvas>
+</div>
+
+<!-- k=4 -->
+<div class="slide">
+    <h2>k = 4</h2>
+    <canvas id="chart4" width="600" height="400"></canvas>
+</div>
+
+<!-- k=5 -->
+<div class="slide">
+    <h2>k = 5</h2>
+    <canvas id="chart5" width="600" height="400"></canvas>
+</div>
+
+<!-- 결론 -->
+<div class="slide">
+    <h2>결론</h2>
+    <p>
+    k → 몇 개 보여줄지<br>
+    temperature → 얼마나 다양하게 고를지<br><br>
+    👉 둘을 같이 조절하면 출력 스타일 변화
+    </p>
+</div>
+
+<script>
+const labels = [0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0];
+
+// k=2
+new Chart(document.getElementById('chart2'), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+            {label:'very', data:[66.91,61.52,58.71,56.99,55.84,55.01,54.39,53.90,53.51], borderWidth:2},
+            {label:'man', data:[33.09,38.48,41.29,43.01,44.16,44.99,45.61,46.10,46.49], borderWidth:2}
+        ]
+    }
+});
+
+// k=3
+new Chart(document.getElementById('chart3'), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+            {label:'very', data:[52.50,45.92,42.67,40.74,39.46,38.56,37.89,37.38,36.96], borderWidth:2},
+            {label:'man', data:[25.96,28.72,30.00,30.74,31.21,31.54,31.78,31.96,32.11], borderWidth:2},
+            {label:'member', data:[21.54,25.36,27.33,28.53,29.33,29.90,30.33,30.66,30.93], borderWidth:2}
+        ]
+    }
+});
+
+// k=4
+new Chart(document.getElementById('chart4'), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+            {label:'very', data:[45.50,38.19,34.66,32.61,31.27,30.33,29.63,29.10,28.67], borderWidth:2},
+            {label:'man', data:[22.50,23.88,24.38,24.61,24.73,24.80,24.85,24.88,24.91], borderWidth:2},
+            {label:'member', data:[18.67,21.09,22.21,22.84,23.24,23.52,23.72,23.87,23.99], borderWidth:2},
+            {label:'big', data:[13.32,16.84,18.75,19.95,20.76,21.35,21.80,22.15,22.43], borderWidth:2}
+        ]
+    }
+});
+
+// k=5
+new Chart(document.getElementById('chart5'), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+            {label:'very', data:[42.47,34.37,30.48,28.22,26.76,25.73,24.97], borderWidth:2},
+            {label:'man', data:[21.00,21.49,21.43,21.29,21.16,21.04,20.94], borderWidth:2},
+            {label:'member', data:[17.43,18.98,19.52,19.76,19.88,19.95,19.99], borderWidth:2},
+            {label:'big', data:[12.43,15.15,16.49,17.26,17.77,18.11,18.37], borderWidth:2},
+            {label:'little', data:[6.67,10.01,12.08,13.46,14.44,15.16,15.72], borderWidth:2}
+        ]
+    }
+});
+</script>
+
+</body>
+</html>
